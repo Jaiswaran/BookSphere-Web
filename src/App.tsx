@@ -26,7 +26,7 @@ export function App(){
  async function addLibrary(b:Book){if(!profile||!supabaseConfigured){setReader({book:b,page:1,preview:false});return}const q=await supabase.from("library").upsert({user_id:profile.id,book_id:b.id,last_page:1,progress:0,completed:false},{onConflict:"user_id,book_id"});if(q.error){setNotice(q.error.message);return}await load();setReader({book:b,page:1,preview:false})}
  return <div className="app"><Header profile={profile} view={view} setView={setView} onAuth={()=>setAuth(true)} onOut={async()=>{await supabase.auth.signOut();setProfile(null)}} search={search} setSearch={setSearch}/>
  {notice&&<div className="notice">{notice}<button onClick={()=>setNotice("")}>×</button></div>}
- {selected?<Detail book={selected} back={()=>setSelected(null)} preview={()=>setReader({book:selected,page:1,preview:!selected.is_free})} buy={()=>buy(selected)}/>:
+ {selected?<Detail book={selected} back={()=>setSelected(null)} preview={()=>{if(selected.is_free&&!profile){setAuth(true);return}setReader({book:selected,page:1,preview:!selected.is_free})}} buy={()=>buy(selected)}/>:
  reader?<Reader book={reader.book} page={reader.page} preview={reader.preview} close={()=>setReader(null)} pageSet={p=>setReader({...reader,page:p})}/>:
  view==="discover"?<Discover books={filtered} loading={loading} open={setSelected} sell={()=>{if(!profile)setAuth(true);else if(profile.role==="AUTHOR")setPublish(true);else setNotice("Only Author accounts can publish.")}}/>:
  view==="library"?<Library items={library} open={setSelected}/>:
