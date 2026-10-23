@@ -22,12 +22,12 @@ export function App(){
  return <div className="app"><Header profile={profile} view={view} setView={setView} onAuth={()=>setAuth(true)} onOut={async()=>{await supabase.auth.signOut();setProfile(null)}} search={search} setSearch={setSearch}/>
  {notice&&<div className="notice">{notice}<button onClick={()=>setNotice("")}>×</button></div>}
  {selected?<Detail book={selected} back={()=>setSelected(null)} preview={()=>{if(selected.is_free&&!profile){setAuth(true);return}setReader({book:selected,page:1,preview:!selected.is_free})}} buy={()=>buy(selected)}/>:
- reader?<Reader book={reader.book} page={reader.page} preview={reader.preview} close={()=>setReader(null)} pageSet={p=>setReader({...reader,page:p})}/>:
+ reader?<Reader book={reader.book} page={reader.page} preview={reader.preview} close={()=>setReader(null)} pageSet={(p:number)=>setReader({...reader,page:p})}/>:
  view==="discover"?<Discover books={filtered} loading={loading} open={setSelected} sell={()=>{if(!profile)setAuth(true);else if(profile.role==="AUTHOR")setPublish(true);else setNotice("Only Author accounts can publish.")}}/>:
  view==="library"?<Library items={library} open={setSelected}/>:
  view==="author"?<Author profile={profile} books={books.filter(b=>b.author_id===profile?.id)} publish={()=>setPublish(true)}/>:
  <ProfilePage profile={profile}/>}
- {auth&&<AuthModal close={()=>setAuth(false)} done={p=>{setProfile(p);setAuth(false)}}/>}{publish&&<Publish profile={profile} close={()=>setPublish(false)} done={()=>{setPublish(false);load()}} error={setNotice}/>} {!reader&&<BottomNav view={view} setView={setView} selected={selected} notice={setNotice}/>}</div>
+ {auth&&<AuthModal close={()=>setAuth(false)} done={(p:Profile)=>{setProfile(p);setAuth(false)}}/>}{publish&&<Publish profile={profile} close={()=>setPublish(false)} done={()=>{setPublish(false);load()}} error={setNotice}/>} {!reader&&<BottomNav view={view} setView={setView} selected={selected} notice={setNotice}/>}</div>
 }
 
 function Header(p:any){return <header className="header"><button className="brand" onClick={()=>p.setView("discover")}><span className="brandMark">◈</span><span><b>BOOKSPHERE</b><small>FAIR LITERARY MARKET</small></span></button><div className="headerRight"><button className="iconButton" onClick={()=>document.querySelector<HTMLInputElement>(".headerRight input")?.focus()} aria-label="Search">⌕</button><button className="iconButton" aria-label="Insights">◌</button>{p.profile?<button className="accountChip" onClick={()=>p.setView("profile")}><span className="avatar">{(p.profile.name||"R")[0]}</span><span>{(p.profile.name||"Profile").slice(0,10)}</span></button>:<button className="accountChip" onClick={p.onAuth}>Sign In</button>}<input value={p.search} onChange={e=>p.setSearch(e.target.value)} placeholder="Search Catalog"/></div></header>}
