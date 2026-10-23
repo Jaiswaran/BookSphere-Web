@@ -37,6 +37,6 @@ export async function renderPdfPage(
   const viewport = page.getViewport({ scale });
   canvas.width = viewport.width;
   canvas.height = viewport.height;
-  await page.render({ canvasContext: canvas.getContext("2d")!, viewport }).promise;
+  await page.render({ canvas, canvasContext: canvas.getContext("2d")!, viewport }).promise;
   return pdf.numPages;
 }
