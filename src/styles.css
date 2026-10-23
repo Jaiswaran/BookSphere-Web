@@ -40,3 +40,12 @@
  .bottomNav button{min-width:0;flex:1;margin:4px}
  .page,.detail{padding-bottom:100px}
 }
+
+/* Real uploaded covers only; never substitute unrelated stock artwork. */
+.bookCoverPlaceholder{width:100%;height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px;background:linear-gradient(145deg,#f1eee5,#e4e8f0);color:var(--blue);text-align:center;overflow:hidden}
+.bookCoverPlaceholder span,.bookCoverPlaceholder small{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--gold)}
+.bookCoverPlaceholder b{font:600 25px/1.2 "Playfair Display",serif;overflow-wrap:anywhere}
+.bookCoverPlaceholder.detailCover{height:420px;max-height:520px}
+.readerLoading{width:min(680px,90vw);min-height:420px;background:#faf7ed;color:#444;padding:40px;display:grid;place-items:center;text-align:center;box-shadow:0 12px 45px #0008}
+.fileHint{display:block;color:var(--muted);font-size:12px;margin:2px 0 8px;overflow-wrap:anywhere}
+@media(max-width:520px){.bookCoverPlaceholder{height:340px}.bookCoverPlaceholder.detailCover{height:360px}}
